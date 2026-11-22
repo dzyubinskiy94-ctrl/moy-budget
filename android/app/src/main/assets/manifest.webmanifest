@@ -1,0 +1,26 @@
+{
+  "name": "Мой бюджет — доходы и расходы",
+  "short_name": "Мой бюджет",
+  "description": "Личный бюджет, быстрые траты и лимиты. Работает без интернета.",
+  "start_url": "./index.html",
+  "scope": "./",
+  "id": "./index.html",
+  "display": "standalone",
+  "background_color": "#0c111c",
+  "theme_color": "#101625",
+  "lang": "ru",
+  "icons": [
+    {
+      "src": "icons/icon-192.png",
+      "sizes": "192x192",
+      "type": "image/png",
+      "purpose": "any maskable"
+    },
+    {
+      "src": "icons/icon-512.png",
+      "sizes": "512x512",
+      "type": "image/png",
+      "purpose": "any maskable"
+    }
+  ]
+}
