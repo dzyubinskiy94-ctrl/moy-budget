@@ -24,7 +24,7 @@ jobs:
     runs-on: ubuntu-latest
     environment:
       name: github-pages
-      url: ${{ steps.deployment.outputs.page_url }}
+      url: ${{ steps.deployment.outputs.page_url || steps.deployment_retry.outputs.page_url }}
     steps:
       - uses: actions/checkout@v4
       - name: Настройка Pages
@@ -37,6 +37,16 @@ jobs:
       - uses: actions/upload-pages-artifact@v3
         with:
           path: '_site'
+      - name: Дождаться индексации артефакта GitHub
+        run: sleep 30
       - name: Публикация
         id: deployment
+        uses: actions/deploy-pages@v4
+        continue-on-error: true
+      - name: Пауза перед повторной попыткой
+        if: steps.deployment.outcome == 'failure'
+        run: sleep 20
+      - name: Повторная публикация
+        if: steps.deployment.outcome == 'failure'
+        id: deployment_retry
         uses: actions/deploy-pages@v4
