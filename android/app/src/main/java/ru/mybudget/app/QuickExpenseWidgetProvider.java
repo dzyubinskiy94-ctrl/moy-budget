@@ -70,8 +70,7 @@ public final class QuickExpenseWidgetProvider extends AppWidgetProvider {
                 String note = favorite.optString("note", "Расход").trim();
                 if (note.length() > 10) note = note.substring(0, 10) + "…";
                 int amount = (int) Math.round(favorite.optDouble("amount"));
-                label = emoji + " " + note + "
-" + amount + " ₽";
+                label = emoji + " " + note + "\n" + amount + " ₽";
                 actionType = "favorite";
                 arg = favorite.optString("id");
             }
