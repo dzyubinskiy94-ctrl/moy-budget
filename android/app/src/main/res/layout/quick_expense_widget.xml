@@ -1,0 +1,32 @@
+<?xml version="1.0" encoding="utf-8"?>
+<LinearLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    android:orientation="vertical"
+    android:background="@drawable/widget_background"
+    android:padding="13dp">
+    <LinearLayout android:layout_width="match_parent" android:layout_height="0dp"
+        android:layout_weight="1" android:orientation="horizontal"
+        android:gravity="center_vertical">
+        <TextView android:id="@+id/widgetTitle" android:layout_width="0dp"
+            android:layout_weight="1" android:layout_height="wrap_content"
+            android:text="₽  МОЙ БЮДЖЕТ" android:textSize="15sp"
+            android:textStyle="bold" android:textColor="#F5FBF8" />
+        <TextView android:id="@+id/widgetAdd" android:layout_width="wrap_content"
+            android:layout_height="38dp" android:gravity="center"
+            android:paddingLeft="15dp" android:paddingRight="15dp"
+            android:background="@drawable/widget_add_background"
+            android:text="+ Расход" android:textSize="14sp"
+            android:textStyle="bold" android:textColor="#10221A" />
+    </LinearLayout>
+    <LinearLayout android:layout_width="match_parent" android:layout_height="0dp"
+        android:layout_weight="1.1" android:orientation="horizontal"
+        android:layout_marginTop="8dp" android:baselineAligned="false">
+        <TextView android:id="@+id/widgetChip1" style="@style/WidgetChip"
+            android:text="100 ₽" />
+        <TextView android:id="@+id/widgetChip2" style="@style/WidgetChip"
+            android:layout_marginLeft="7dp" android:text="300 ₽" />
+        <TextView android:id="@+id/widgetChip3" style="@style/WidgetChip"
+            android:layout_marginLeft="7dp" android:text="500 ₽" />
+    </LinearLayout>
+</LinearLayout>

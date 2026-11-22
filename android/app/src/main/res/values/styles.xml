@@ -1,8 +1,21 @@
 <resources>
-    <style name="AppTheme" parent="android:style/Theme.Material.NoActionBar">
-        <item name="android:statusBarColor">#0c111c</item>
-        <item name="android:navigationBarColor">#0c111c</item>
-        <item name="android:windowLightStatusBar">false</item>
-        <item name="android:windowActionModeOverlay">true</item>
+  <style name="AppTheme" parent="android:style/Theme.Material.NoActionBar">
+    <item name="android:statusBarColor">#0C111C</item>
+    <item name="android:navigationBarColor">#0C111C</item>
+    <item name="android:windowLightStatusBar">false</item>
+    <item name="android:windowActionModeOverlay">true</item>
+    <item name="android:fontFamily">sans</item>
+  </style>
+    <style name="WidgetChip">
+        <item name="android:layout_width">0dp</item>
+        <item name="android:layout_weight">1</item>
+        <item name="android:layout_height">match_parent</item>
+        <item name="android:gravity">center</item>
+        <item name="android:background">@drawable/widget_chip_background</item>
+        <item name="android:textColor">#EFF8F4</item>
+        <item name="android:textSize">12sp</item>
+        <item name="android:textStyle">bold</item>
+        <item name="android:maxLines">2</item>
+        <item name="android:ellipsize">end</item>
     </style>
 </resources>

@@ -81,6 +81,7 @@
       $('#monthLabel').textContent=fmtMonth(selectedMonth);
       for(const t of ['home','transactions','budgets','settings']){$('#tab-'+t).classList.toggle('active',tab===t);document.querySelector(`[data-tab="${t}"]`).classList.toggle('active',tab===t)}
       renderHome();renderTransactions();renderBudgets();renderSettings();
+      syncWidgetShortcuts();
     }
     function transactionRows(items,empty='Пока нет операций. Добавьте первую трату или доход.'){
       if(!items.length)return `<div class="empty-state"><span class="emoji">🧾</span>${esc(empty)}</div>`;
@@ -123,6 +124,31 @@
     $('#backupFile').addEventListener('change',e=>importJson(e.target.files?.[0]));
     $('#modal').addEventListener('click',e=>{if(e.target.id==='modal')closeModal()});
     document.addEventListener('keydown',e=>{if(e.key==='Escape'&&$('#modal').classList.contains('open'))closeModal();if(e.key==='Enter'&&$('#modal').classList.contains('open')&&e.target.id==='amount'){e.preventDefault();saveTx()}});
+    // Native Android widget bridge. Uses the same WebView localStorage as the app.
+    let widgetShortcutsSnapshot = '';
+    function syncWidgetShortcuts(){
+      if(!window.AndroidBridge || typeof window.AndroidBridge.syncWidget !== 'function')return;
+      const favorites=state.favorites.slice(0,3).map(f=>({id:String(f.id),amount:Number(f.amount),note:String(f.note||''),category:String(f.category)}));
+      const categories=state.expenses.map(c=>({id:String(c.id),name:String(c.name),emoji:String(c.emoji||'')}));
+      const payload=JSON.stringify({favorites,categories});
+      if(payload===widgetShortcutsSnapshot)return;
+      try{window.AndroidBridge.syncWidget(payload);widgetShortcutsSnapshot=payload;}catch(e){console.warn('Widget sync failed',e)}
+    }
+    window.MoyBudgetWidget = Object.freeze({
+      handle:function(action,arg){
+        if(action==='favorite'){
+          if(!state.favorites.some(f=>f.id===arg)){showToast('Быстрый расход изменён. Откройте приложение.');syncWidgetShortcuts();return false;}
+          quickExpense(arg);return true;
+        }
+        if(action==='amount'){
+          const value=Number(arg);
+          openTransaction('expense');
+          if(Number.isFinite(value)&&value>0&&value<=1e12)$('#amount').value=String(value);
+          return true;
+        }
+        openTransaction('expense');return true;
+      }
+    });
     if('serviceWorker' in navigator && location.protocol.startsWith('http'))navigator.serviceWorker.register('./sw.js').catch(()=>{});
     render();
   })();

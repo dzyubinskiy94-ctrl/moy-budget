@@ -1,1 +1,2 @@
-<resources><string name="app_name">Мой бюджет</string></resources>
+<resources><string name="app_name">Мой бюджет</string>    <string name="widget_description">Быстро записывайте расходы прямо с главного экрана</string>
+</resources>
