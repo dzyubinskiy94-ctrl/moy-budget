@@ -1,0 +1,46 @@
+name: Build Mondeo Drive APK
+on:
+  push:
+    branches: [mondeo-drive-apk]
+    paths:
+      - mondeo-project.tar.xz.base64
+      - .github/workflows/mondeo-build.yml
+  workflow_dispatch:
+permissions:
+  contents: write
+jobs:
+  build-apk:
+    runs-on: ubuntu-latest
+    timeout-minutes: 35
+    steps:
+      - uses: actions/checkout@v4
+      - name: Restore Android project
+        run: base64 -d mondeo-project.tar.xz.base64 | tar -xJf -
+      - uses: actions/setup-java@v4
+        with:
+          distribution: temurin
+          java-version: '17'
+      - uses: android-actions/setup-android@v3
+      - name: Install Android API 35
+        run: sdkmanager 'platforms;android-35' 'build-tools;35.0.0'
+      - uses: gradle/actions/setup-gradle@v4
+        with:
+          gradle-version: '8.9'
+      - name: Build installable APK
+        run: gradle --no-daemon :app:assembleDebug --stacktrace
+      - name: Verify resulting artifact
+        run: |
+          test -s app/build/outputs/apk/debug/app-debug.apk
+          sha256sum app/build/outputs/apk/debug/app-debug.apk
+          cp app/build/outputs/apk/debug/app-debug.apk MondeoDrive-2.0.apk
+      - uses: actions/upload-artifact@v4
+        with:
+          name: MondeoDrive-2.0-APK
+          path: MondeoDrive-2.0.apk
+      - name: Save direct-download APK in dedicated branch
+        run: |
+          git config user.name 'github-actions[bot]'
+          git config user.email '41898282+github-actions[bot]@users.noreply.github.com'
+          git add MondeoDrive-2.0.apk
+          git commit -m 'Build Mondeo Drive 2.0 APK' || exit 0
+          git push origin HEAD:mondeo-drive-apk
